@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "STM32 ARMCC5",
+            "compilerPath": "D:/STM32/keil5/ARM/ARMCC/bin/armcc.exe",
+            "compilerArgs": [
+                "--cpu Cortex-M3"
+            ],
+            "includePath": [
+                "${workspaceFolder}",
+                "${workspaceFolder}/Start",
+                "${workspaceFolder}/Library",
+                "${workspaceFolder}/User",
+                "${workspaceFolder}/System",
+                "${workspaceFolder}/Hardware",
+                "D:/STM32/keil5/ARM/ARMCC/include"
+            ],
+            "defines": [
+                "USE_STDPERIPH_DRIVER",
+                "STM32F10X_MD"
+            ],
+            "intelliSenseMode": "windows-gcc-arm",
+            "cStandard": "c99"
+        }
+    ],
+    "version": 4
+}
