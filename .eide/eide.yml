@@ -98,7 +98,8 @@ targets:
   Target 1:
     cppPreprocessAttrs:
       defineList:
-        - USE_STDPERIPH_DRIVER;STM32F10X_MD
+        - USE_STDPERIPH_DRIVER
+        - STM32F10X_MD
       incList:
         - .
         - Start
