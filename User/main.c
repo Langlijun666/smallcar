@@ -4,17 +4,20 @@
 #include "PWM.h" 
 int main(void)
 {
-	OLED_Init();
-	
-	OLED_ShowChar(1, 1, 'A');
-	OLED_ShowString(1, 3, "HelloWorld!");
-	OLED_ShowNum(2, 1, 12345, 5);
-	OLED_ShowSignedNum(2, 7, -66, 2);
-	OLED_ShowHexNum(3, 1, 0xAA55, 4);
-	OLED_ShowBinNum(4, 1, 0xAA55, 16);
-	
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+    GPIO_InitTypeDef GPIO_InitStructure;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+    GPIO_SetBits(GPIOA, GPIO_Pin_4);
+    GPIO_ResetBits(GPIOA,GPIO_Pin_5);
+	PWM_Init();
+    PWM_SetCompare2(10000);
 	while (1)
 	{
-		
+		Delay_ms(2000);
+        PWM_SetCompare2(0);
+        while(1);
 	}
 }
