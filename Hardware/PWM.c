@@ -1,4 +1,5 @@
 #include "stm32f10x.h"                  // Device header
+#include "PWM.h"
 
 /**
   * 函    数：PWM初始化
@@ -14,9 +15,9 @@ void PWM_Init(void)
 	/*GPIO初始化*/
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_0;	//选择PA1和PA0引脚，TIM2的CH1和CH2通道
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);							//将PA1引脚初始化为复用推挽输出	
+	GPIO_Init(GPIOA, &GPIO_InitStructure);							//将PA1和PA0引脚初始化为复用推挽输出	
 																	//受外设控制的引脚，均需要配置为复用模式
 	
 	/*配置时钟源*/
@@ -26,7 +27,7 @@ void PWM_Init(void)
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;				//定义结构体变量
 	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;     //时钟分频，选择不分频，此参数用于配置滤波器时钟，不影响时基单元功能
 	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up; //计数器模式，选择向上计数
-	TIM_TimeBaseInitStructure.TIM_Period = 20000 - 1;				//计数周期，即ARR的值
+	TIM_TimeBaseInitStructure.TIM_Period = 100 - 1;					//计数周期，即ARR的值，设置为100便于百分比控制
 	TIM_TimeBaseInitStructure.TIM_Prescaler = 72 - 1;				//预分频器，即PSC的值
 	TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;            //重复计数器，高级定时器才会用到
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStructure);             //将结构体变量交给TIM_TimeBaseInit，配置TIM2的时基单元
@@ -41,19 +42,27 @@ void PWM_Init(void)
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;   //输出使能
 	TIM_OCInitStructure.TIM_Pulse = 0;								//初始的CCR值
 	TIM_OC2Init(TIM2, &TIM_OCInitStructure);                        //将结构体变量交给TIM_OC2Init，配置TIM2的输出比较通道2
-	
+	TIM_OC1Init(TIM2, &TIM_OCInitStructure);                        //将结构体变量交给TIM_OC1Init，配置TIM2的输出比较通道1
 	/*TIM使能*/
 	TIM_Cmd(TIM2, ENABLE);			//使能TIM2，定时器开始运行
 }
 
 /**
-  * 函    数：PWM设置CCR
+  * 函    数：PWM设置CCR1
   * 参    数：Compare 要写入的CCR的值，范围：0~100
   * 返 回 值：无
-  * 注意事项：CCR和ARR共同决定占空比，此函数仅设置CCR的值，并不直接是占空比
-  *           占空比Duty = CCR / (ARR + 1)
   */
-void PWM_SetCompare2(uint16_t Compare)
+void PWM_SetCompare1(int8_t Compare)
+{
+	TIM_SetCompare1(TIM2, Compare);		//设置CCR1的值
+}
+
+/**
+  * 函    数：PWM设置CCR2
+  * 参    数：Compare 要写入的CCR的值，范围：0~100
+  * 返 回 值：无
+  */
+void PWM_SetCompare2(int8_t Compare)
 {
 	TIM_SetCompare2(TIM2, Compare);		//设置CCR2的值
 }

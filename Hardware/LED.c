@@ -6,32 +6,32 @@ void LED_Init(void)
 	
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_2;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3;  // 修改：PA1改为PA3，避免与PWM冲突
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 	
-	GPIO_SetBits(GPIOA, GPIO_Pin_1 | GPIO_Pin_2);
+	GPIO_SetBits(GPIOA, GPIO_Pin_2 | GPIO_Pin_3);
 }
 
 void LED1_ON(void)
 {
-	GPIO_ResetBits(GPIOA, GPIO_Pin_1);
+	GPIO_ResetBits(GPIOA, GPIO_Pin_3);  // 修改：PA1改为PA3
 }
 
 void LED1_OFF(void)
 {
-	GPIO_SetBits(GPIOA, GPIO_Pin_1);
+	GPIO_SetBits(GPIOA, GPIO_Pin_3);    // 修改：PA1改为PA3
 }
 
 void LED1_Turn(void)
 {
-	if (GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_1) == 0)
+	if (GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_3) == 0)  // 修改：PA1改为PA3
 	{
-		GPIO_SetBits(GPIOA, GPIO_Pin_1);
+		GPIO_SetBits(GPIOA, GPIO_Pin_3);
 	}
 	else
 	{
-		GPIO_ResetBits(GPIOA, GPIO_Pin_1);
+		GPIO_ResetBits(GPIOA, GPIO_Pin_3);
 	}
 }
 

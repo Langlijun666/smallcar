@@ -82,6 +82,10 @@ virtualFolder:
         - path: Hardware/OLED_Font.h
         - path: Hardware/PWM.c
         - path: Hardware/PWM.h
+        - path: Hardware/motor.c
+        - path: Hardware/motor.h
+        - path: Hardware/Car.c
+        - path: Hardware/Car.h
       folders: []
     - name: User
       files:
