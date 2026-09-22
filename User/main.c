@@ -1,16 +1,16 @@
+
 #include "stm32f10x.h"                  // Device header
-#include "Delay.h"
-#include "OLED.h"
-#include "PWM.h" 
 #include "Car.h"
+#include "Serial.h"
+
 int main(void)
 {
     Car_Init();
-    while (1)
+    Serial_Init();
+    Car_RemoteControl();//自动接收手机指令并按规则移动
+
+    while(1)
     {
-        Car_Go_Backward(50);
-        Delay_ms(1000);
-        Car_Stop();
-        Delay_ms(1000);
+        
     }
 }

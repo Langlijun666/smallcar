@@ -63,17 +63,17 @@
 // 初始化小车
 Car_Init();
 
-// 前进（速度范围：0~100）
-Car_Go_Forward(50);
+// 前进（速度固定为70，改 Hardware/Car.c 里的 CAR_SPEED 可调整）
+Car_Go_Forward();
 
 // 后退
-Car_Go_Backward(50);
+Car_Go_Backward();
 
 // 左转
-Car_Turn_Left(30);
+Car_Turn_Left();
 
 // 右转
-Car_Turn_Right(30);
+Car_Turn_Right();
 
 // 停止
 Car_Stop();

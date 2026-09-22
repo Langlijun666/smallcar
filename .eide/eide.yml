@@ -86,6 +86,8 @@ virtualFolder:
         - path: Hardware/motor.h
         - path: Hardware/Car.c
         - path: Hardware/Car.h
+        - path: Hardware/Serial.c
+        - path: Hardware/Serial.h
       folders: []
     - name: User
       files:
