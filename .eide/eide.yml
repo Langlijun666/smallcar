@@ -90,6 +90,8 @@ virtualFolder:
         - path: Hardware/Serial.h
         - path: Hardware/NVIC.c
         - path: Hardware/NVIC.h
+        - path: Hardware/Servo.c
+        - path: Hardware/Servo.h
       folders: []
     - name: User
       files:

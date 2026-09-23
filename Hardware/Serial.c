@@ -2,6 +2,7 @@
 #include"Serial.h"
 #include"NVIC.h"
 #include"Car.h"
+#include"Servo.h"
 /*对USART1进行初始化
 TX-PA9 RX -PA10
 9600bits 数据位8，停止位1，无校验位
@@ -88,6 +89,9 @@ void USART1_IRQHandler(void)
             case 'B': case '2': Car_Go_Backward(); break;
             case 'L': case '3': Car_Turn_Left();   break;
             case 'R': case '4': Car_Turn_Right();  break;
+            case'5': SetServoAngle(0);             break;
+            case'6': SetServoAngle(90);            break;
+            case'7': SetServoAngle(180);           break;
             default:            Car_Stop();        break;//S和不认识的字符都停车
         }
         
