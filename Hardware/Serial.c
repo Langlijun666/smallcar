@@ -1,5 +1,7 @@
 #include"stm32f10x.h"
 #include"Serial.h"
+#include"NVIC.h"
+#include"Car.h"
 /*对USART1进行初始化
 TX-PA9 RX -PA10
 9600bits 数据位8，停止位1，无校验位
@@ -46,6 +48,10 @@ void Serial_Init(void)
     GPIO_InitStructure2.GPIO_Mode = GPIO_Mode_IPU;
     GPIO_Init(GPIOB,&GPIO_InitStructure2);
     */
+    //打开串口中断
+    USART_ITConfig(USART1,USART_IT_RXNE,ENABLE);
+    //初始化中断
+    MyNVIC_Init();
 }
 //发送数组函数，三个参数分别为要用的串口，要传的数组首地址，数组长度
 void Serial_SendBytes(USART_TypeDef * A, int16_t* Data1,int16_t length)
@@ -65,4 +71,25 @@ void Serial_ReceiveByte(USART_TypeDef *A,int16_t *Data1)
 
     *Data1 = USART_ReceiveData(A);
 
+}
+//蓝牙串口的中断函数，用来操控小车
+void USART1_IRQHandler(void)
+{
+    while(USART_GetFlagStatus(USART1,USART_FLAG_RXNE) == SET)
+    {
+        uint16_t cmd = USART_ReceiveData(USART1);
+        if (cmd >= 'a' && cmd <= 'z')//小写字母自动当大写处理
+        {
+            cmd = cmd - 'a' + 'A';
+        }
+        switch (cmd)
+        {
+            case 'F': case '1': Car_Go_Forward();  break;
+            case 'B': case '2': Car_Go_Backward(); break;
+            case 'L': case '3': Car_Turn_Left();   break;
+            case 'R': case '4': Car_Turn_Right();  break;
+            default:            Car_Stop();        break;//S和不认识的字符都停车
+        }
+        
+    }
 }

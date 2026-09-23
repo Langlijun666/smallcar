@@ -46,25 +46,3 @@ void Car_Stop(void)
     Motor_Set_Right_Speed(0);
 }
 
-//蓝牙遥控：手机蓝牙串口发一个字符，小车按下面的规则自动行动
-//F或1-前进  B或2-后退  L或3-左转  R或4-右转  其余字符-停止
-void Car_RemoteControl(void)
-{
-    int16_t cmd;
-    while (1)
-    {   
-        Serial_ReceiveByte(USART1, &cmd);//一直等，手机发来一个字符就继续
-        if (cmd >= 'a' && cmd <= 'z')//小写字母自动当大写处理
-        {
-            cmd = cmd - 'a' + 'A';
-        }
-        switch (cmd)
-        {
-            case 'F': case '1': Car_Go_Forward();  break;
-            case 'B': case '2': Car_Go_Backward(); break;
-            case 'L': case '3': Car_Turn_Left();   break;
-            case 'R': case '4': Car_Turn_Right();  break;
-            default:            Car_Stop();        break;//S和不认识的字符都停车
-        }
-    }
-}
