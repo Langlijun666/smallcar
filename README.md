@@ -1,104 +1,194 @@
-# STM32 循迹小车
+# STM32 智能小车
 
-基于 STM32F103 的智能循迹小车项目，完全开源。
+基于 STM32F103C8T6 的蓝牙智能小车项目，使用 Keil MDK / VS Code EIDE 开发，基于 STM32F10x 标准外设库。
 
 ## 项目简介
 
-这是一个使用 STM32F103 系列 MCU 开发的循迹小车项目，采用 Keil MDK 开发环境，使用 STM32 标准外设库。项目实现了四轮驱动小车的运动控制，支持前进、后退、左转、右转和停止等基本功能。
+本项目实现了一个可通过 HC-06 蓝牙串口遥控的智能小车，主要功能包括：
+
+- 四轮小车前进、后退、左转、右转、停止
+- 左右电机独立 PWM 调速
+- SG90 舵机角度控制
+- HC-SR04 超声波测距
+- OLED、LED、按键等基础外设驱动
+- 通过 USART1 中断自动接收蓝牙指令，不需要在主循环中反复判断
 
 ## 硬件模块
 
-| 模块 | 文件 | 说明 |
+| 模块 | 文件 | 功能 |
 |------|------|------|
-| Car | `Hardware/Car.c/.h` | 小车运动控制（前进、后退、转向） |
-| Motor | `Hardware/motor.c/.h` | 电机驱动（正转、反转、调速） |
-| PWM | `Hardware/PWM.c/.h` | PWM 电机控制 |
-| LED | `Hardware/LED.c/.h` | LED 指示灯驱动 |
-| Key | `Hardware/Key.c/.h` | 按键输入检测 |
-| OLED | `Hardware/OLED.c/.h` | OLED 显示屏驱动 |
+| Car | `Hardware/Car.c/.h` | 小车运动控制 |
+| Motor | `Hardware/motor.c/.h` | 左右电机方向和速度控制 |
+| PWM | `Hardware/PWM.c/.h` | 电机 PWM 和舵机 PWM |
+| Serial | `Hardware/Serial.c/.h` | USART1 蓝牙通信 |
+| Servo | `Hardware/Servo.c/.h` | SG90 舵机控制 |
+| Ultrasound | `Hardware/Ultrasound.c/.h` | HC-SR04 超声波测距 |
+| NVIC | `Hardware/NVIC.c/.h` | USART1 中断优先级配置 |
+| LED | `Hardware/LED.c/.h` | LED 指示灯 |
+| Key | `Hardware/Key.c/.h` | 按键检测 |
+| OLED | `Hardware/OLED.c/.h` | OLED 显示驱动 |
+| MyDelay | `System/MyDelay.c/.h` | TIM4 计时，用于超声波测距 |
 
 ## 软件架构
 
-```
-├── Start/          # 启动文件与 CMSIS 核心
+```text
+├── Start/          # 启动文件、CMSIS 和系统文件
 ├── Library/        # STM32F10x 标准外设库
-├── System/         # 系统级驱动（延时等）
+├── System/         # 延时和系统计时
 ├── Hardware/       # 硬件模块驱动
-├── User/           # 用户应用代码（main.c）
-└── .eide/          # EIDE 工程配置
+├── User/           # 主程序
+├── Project.uvprojx # Keil MDK 工程
+└── .eide/          # VS Code EIDE 工程配置
 ```
 
 ## 引脚分配
 
-### 电机控制引脚
+### 电机控制
 
-| 功能 | GPIO引脚 | 说明 |
-|------|----------|------|
-| 左电机 AIN1 | PA4 | 左电机正转控制 |
-| 左电机 AIN2 | PA5 | 左电机反转控制 |
-| 右电机 BIN1 | PA6 | 右电机正转控制 |
-| 右电机 BIN2 | PA7 | 右电机反转控制 |
+小车使用 TB6612 电机驱动模块。左右两侧电机分别由两路 PWM 控制，四轮小车可以将同侧电机并联使用。
 
-### PWM输出引脚
+| 功能 | GPIO | 定时器通道 | 说明 |
+|------|------|------------|------|
+| 左电机 PWM | PA0 | TIM2_CH1 | 左电机调速 |
+| 右电机 PWM | PA1 | TIM2_CH2 | 右电机调速 |
+| 左电机 AIN1 | PA4 | GPIO | 左电机方向 |
+| 左电机 AIN2 | PA5 | GPIO | 左电机方向 |
+| 右电机 BIN1 | PA6 | GPIO | 右电机方向 |
+| 右电机 BIN2 | PA7 | GPIO | 右电机方向 |
 
-| 功能 | GPIO引脚 | 定时器通道 |
-|------|----------|------------|
-| 左电机PWM | PA0 | TIM2_CH1 |
-| 右电机PWM | PA1 | TIM2_CH2 |
+TB6612 的 `STBY` 引脚需要接高电平，否则电机驱动不会工作。
 
-### 其他外设引脚
+### 蓝牙模块
 
-| 功能 | GPIO引脚 | 说明 |
-|------|----------|------|
-| LED1 | PA3 | 指示灯1 |
-| LED2 | PA2 | 指示灯2 |
-| 按键1 | PB1 | 按键输入1 |
-| 按键2 | PB11 | 按键输入2 |
+| 功能 | GPIO | 说明 |
+|------|------|------|
+| USART1 TX | PA9 | 接 HC-06 RX |
+| USART1 RX | PA10 | 接 HC-06 TX |
 
-## 运动控制API
+USART1 配置为 `9600 8N1`，即波特率 9600、8 个数据位、无校验、1 个停止位。HC-06 的 TX/RX 需要与 STM32 交叉连接。
+
+### 舵机
+
+| 功能 | GPIO | 定时器通道 | 说明 |
+|------|------|------------|------|
+| SG90 信号线 | PB0 | TIM3_CH3 | 舵机 PWM 信号 |
+
+SG90 舵机建议使用独立 5V 电源供电，并与 STM32 共地。
+
+### 超声波模块
+
+| 功能 | GPIO | 说明 |
+|------|------|------|
+| HC-SR04 TRIG | PB5 | 触发信号 |
+| HC-SR04 ECHO | PB6 | 回波信号，使用 EXTI6 中断测量 |
+
+### 其他外设
+
+| 功能 | GPIO | 说明 |
+|------|------|------|
+| LED1 | PA3 | 指示灯 1 |
+| LED2 | PA2 | 指示灯 2 |
+| 按键 1 | PB1 | 按键输入 |
+| 按键 2 | PB11 | 按键输入 |
+| SWD | PA13/PA14 | 调试和烧录接口 |
+
+## 蓝牙控制指令
+
+蓝牙收到字符后，由 `USART1_IRQHandler` 自动处理，主函数中不需要手动调用控制函数。
+
+| 指令 | 功能 |
+|------|------|
+| `F` / `1` | 前进 |
+| `B` / `2` | 后退 |
+| `L` / `3` | 左转 |
+| `R` / `4` | 右转 |
+| `5` | 舵机转到 0° |
+| `6` | 舵机转到 90° |
+| `7` | 舵机转到 180° |
+| 其他字符 | 停车 |
+
+小写字母 `f`、`b`、`l`、`r` 会自动按大写字母处理。
+
+## 运动控制 API
 
 ```c
 #include "Car.h"
 
-// 初始化小车
-Car_Init();
-
-// 前进（速度固定为70，改 Hardware/Car.c 里的 CAR_SPEED 可调整）
-Car_Go_Forward();
-
-// 后退
-Car_Go_Backward();
-
-// 左转
-Car_Turn_Left();
-
-// 右转
-Car_Turn_Right();
-
-// 停止
-Car_Stop();
+Car_Init();           // 初始化电机
+Car_Go_Forward();     // 前进
+Car_Go_Backward();    // 后退
+Car_Turn_Left();      // 左转
+Car_Turn_Right();     // 右转
+Car_Stop();           // 停止
 ```
+
+整车速度在 `Hardware/Car.c` 中定义：
+
+```c
+#define CAR_SPEED 70
+```
+
+修改 `CAR_SPEED` 可以调整整车速度。
+
+## 舵机 API
+
+```c
+#include "Servo.h"
+
+Servo_Init();
+SetServoAngle(0);     // 0°
+SetServoAngle(90);    // 90°
+SetServoAngle(180);   // 180°
+```
+
+角度范围为 `0~180`，超出范围不会设置输出。
+
+## 超声波 API
+
+```c
+#include "Ultrasound.h"
+
+Ultrasound_Init();
+uint32_t distance = GetDistance();
+```
+
+`GetDistance()` 返回单位为厘米的距离值。当前实现会连续测量 10 次并取平均值，因此一次测量大约需要 0.6 秒。
 
 ## 开发环境
 
-- **MCU**: STM32F103 系列
-- **IDE**: Keil MDK / VS Code (EIDE)
-- **库**: STM32F10x 标准外设库
+- **MCU**：STM32F103C8T6
+- **电机驱动**：TB6612
+- **蓝牙模块**：HC-06
+- **舵机**：SG90
+- **超声波模块**：HC-SR04
+- **开发工具**：Keil MDK、VS Code EIDE
+- **固件库**：STM32F10x 标准外设库
 
 ## 使用方法
 
-1. 克隆本仓库
-2. 使用 Keil MDK 或 EIDE 打开工程文件
-3. 编译并烧录到 STM32 开发板
+1. 克隆仓库：
 
-## 版本
+```bash
+git clone https://github.com/Langlijun666/smallcar.git
+```
 
-- **v2.0** - 新增四电机驱动功能，支持小车运动控制
-- **v1.0** - 基础框架搭建，OLED 显示功能
+2. 使用 Keil 打开 `Project.uvprojx`，或者使用 VS Code EIDE 打开工程。
 
-## 开源协议
+3. 编译工程并烧录到 STM32F103C8T6。
 
-本项目完全开源，欢迎学习交流。
+4. 按照引脚分配连接 TB6612、HC-06、SG90 和 HC-SR04。
+
+5. 使用蓝牙串口工具连接 HC-06，发送 `F`、`B`、`L`、`R` 等指令控制小车。
+
+## 版本记录
+
+- **v3.0**：新增 HC-06 蓝牙中断遥控、SG90 舵机控制、HC-SR04 超声波测距
+- **v2.0**：新增 TB6612 四轮电机驱动和运动控制
+- **v1.0**：基础框架、OLED、LED、按键和 PWM 功能
+
+## 开源说明
+
+本项目用于学习和交流，欢迎提出问题和改进建议。
 
 ## 作者
 

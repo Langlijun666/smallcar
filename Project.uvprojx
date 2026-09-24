@@ -664,6 +664,17 @@
               <FileType>5</FileType>
               <FilePath>.\System\Delay.h</FilePath>
             </File>
+
+            <File>
+              <FileName>MyDelay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\System\MyDelay.c</FilePath>
+            </File>
+            <File>
+              <FileName>MyDelay.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\System\MyDelay.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -713,6 +724,67 @@
               <FileName>PWM.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Hardware\PWM.h</FilePath>
+            </File>
+
+            <File>
+              <FileName>motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>motor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\motor.h</FilePath>
+            </File>
+            <File>
+              <FileName>Car.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\Car.c</FilePath>
+            </File>
+            <File>
+              <FileName>Car.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\Car.h</FilePath>
+            </File>
+            <File>
+              <FileName>Serial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\Serial.c</FilePath>
+            </File>
+            <File>
+              <FileName>Serial.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\Serial.h</FilePath>
+            </File>
+            <File>
+              <FileName>NVIC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\NVIC.c</FilePath>
+            </File>
+            <File>
+              <FileName>NVIC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\NVIC.h</FilePath>
+            </File>
+            <File>
+              <FileName>Servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\Servo.c</FilePath>
+            </File>
+            <File>
+              <FileName>Servo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\Servo.h</FilePath>
+            </File>
+            <File>
+              <FileName>Ultrasound.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\Ultrasound.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ultrasound.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\Ultrasound.h</FilePath>
             </File>
           </Files>
         </Group>
