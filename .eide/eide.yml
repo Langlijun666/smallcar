@@ -70,6 +70,8 @@ virtualFolder:
       files:
         - path: System/Delay.c
         - path: System/Delay.h
+        - path: System/MyDelay.c
+        - path: System/MyDelay.h
       folders: []
     - name: Hardware
       files:
@@ -92,6 +94,8 @@ virtualFolder:
         - path: Hardware/NVIC.h
         - path: Hardware/Servo.c
         - path: Hardware/Servo.h
+        - path: Hardware/Ultrasound.c
+        - path: Hardware/Ultrasound.h
       folders: []
     - name: User
       files:
