@@ -757,16 +757,6 @@
               <FilePath>.\Hardware\Serial.h</FilePath>
             </File>
             <File>
-              <FileName>NVIC.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Hardware\NVIC.c</FilePath>
-            </File>
-            <File>
-              <FileName>NVIC.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Hardware\NVIC.h</FilePath>
-            </File>
-            <File>
               <FileName>Servo.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Hardware\Servo.c</FilePath>

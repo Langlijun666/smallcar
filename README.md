@@ -23,7 +23,6 @@
 | Serial | `Hardware/Serial.c/.h` | USART1 蓝牙通信 |
 | Servo | `Hardware/Servo.c/.h` | SG90 舵机控制 |
 | Ultrasound | `Hardware/Ultrasound.c/.h` | HC-SR04 超声波测距 |
-| NVIC | `Hardware/NVIC.c/.h` | USART1 中断优先级配置 |
 | LED | `Hardware/LED.c/.h` | LED 指示灯 |
 | Key | `Hardware/Key.c/.h` | 按键检测 |
 | OLED | `Hardware/OLED.c/.h` | OLED 显示驱动 |
