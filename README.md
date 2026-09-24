@@ -8,6 +8,7 @@
 
 - 四轮小车前进、后退、左转、右转、停止
 - 左右电机独立 PWM 调速
+- 四路红外循迹检测，并通过四个 LED 显示检测状态
 - SG90 舵机角度控制
 - HC-SR04 超声波测距
 - OLED、LED、按键等基础外设驱动
@@ -21,6 +22,7 @@
 | Motor | `Hardware/motor.c/.h` | 左右电机方向和速度控制 |
 | PWM | `Hardware/PWM.c/.h` | 电机 PWM 和舵机 PWM |
 | Serial | `Hardware/Serial.c/.h` | USART1 蓝牙通信 |
+| Ir_obstacle | `Hardware/Ir_obstacle.c/.h` | 四路红外循迹检测和状态灯显示 |
 | Servo | `Hardware/Servo.c/.h` | SG90 舵机控制 |
 | Ultrasound | `Hardware/Ultrasound.c/.h` | HC-SR04 超声波测距 |
 | LED | `Hardware/LED.c/.h` | LED 指示灯 |
@@ -81,6 +83,28 @@ SG90 舵机建议使用独立 5V 电源供电，并与 STM32 共地。
 | HC-SR04 TRIG | PB5 | 触发信号 |
 | HC-SR04 ECHO | PB6 | 回波信号，使用 EXTI6 中断测量 |
 
+### 红外循迹模块
+
+每个红外循迹模块使用一路数字输出信号，并对应一个状态指示灯。
+
+| 模块 | 传感器信号 | GPIO 模式 | 状态灯 | LED GPIO |
+|------|------------|------------|--------|----------|
+| 红外 1 | DO | 输入 | 灯 1 | PB14 |
+| 红外 2 | DO | 输入 | 灯 2 | PB15 |
+| 红外 3 | DO | 输入 | 灯 3 | PA8 |
+| 红外 4 | DO | 输入 | 灯 4 | PA11 |
+
+对应关系：
+
+```text
+PB7  红外1 -> PB14 灯1
+PB10 红外2 -> PB15 灯2
+PB12 红外3 -> PA8  灯3
+PB13 红外4 -> PA11 灯4
+```
+
+当前代码按照“传感器输出低电平表示检测到黑色”的逻辑点亮对应 LED。不同红外模块的输出极性可能相反，需要根据实际模块调整。
+
 ### 其他外设
 
 | 功能 | GPIO | 说明 |
@@ -129,6 +153,24 @@ Car_Stop();           // 停止
 
 修改 `CAR_SPEED` 可以调整整车速度。
 
+## 红外循迹 API
+
+```c
+#include "Ir_obstacle.h"
+
+Ir_obstacle_Init();   // 初始化四个传感器和四个状态灯
+Ir_obstacle_Run();    // 读取传感器并刷新状态灯
+```
+
+为了实时显示传感器状态，需要在主循环中持续调用 `Ir_obstacle_Run()`：
+
+```c
+while (1)
+{
+    Ir_obstacle_Run();
+}
+```
+
 ## 舵机 API
 
 ```c
@@ -158,6 +200,7 @@ uint32_t distance = GetDistance();
 - **MCU**：STM32F103C8T6
 - **电机驱动**：TB6612
 - **蓝牙模块**：HC-06
+- **红外循迹模块**：4 路数字输出红外传感器
 - **舵机**：SG90
 - **超声波模块**：HC-SR04
 - **开发工具**：Keil MDK、VS Code EIDE
@@ -175,12 +218,13 @@ git clone https://github.com/Langlijun666/smallcar.git
 
 3. 编译工程并烧录到 STM32F103C8T6。
 
-4. 按照引脚分配连接 TB6612、HC-06、SG90 和 HC-SR04。
+4. 按照引脚分配连接 TB6612、HC-06、SG90、HC-SR04 和四路红外循迹模块。
 
 5. 使用蓝牙串口工具连接 HC-06，发送 `F`、`B`、`L`、`R` 等指令控制小车。
 
 ## 版本记录
 
+- **v3.1**：新增四路红外循迹检测和状态灯显示
 - **v3.0**：新增 HC-06 蓝牙中断遥控、SG90 舵机控制、HC-SR04 超声波测距
 - **v2.0**：新增 TB6612 四轮电机驱动和运动控制
 - **v1.0**：基础框架、OLED、LED、按键和 PWM 功能

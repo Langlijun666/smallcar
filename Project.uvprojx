@@ -776,6 +776,16 @@
               <FileType>5</FileType>
               <FilePath>.\Hardware\Ultrasound.h</FilePath>
             </File>
+            <File>
+              <FileName>Ir_obstacle.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\Ir_obstacle.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ir_obstacle.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\Ir_obstacle.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

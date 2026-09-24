@@ -94,6 +94,8 @@ virtualFolder:
         - path: Hardware/Servo.h
         - path: Hardware/Ultrasound.c
         - path: Hardware/Ultrasound.h
+        - path: Hardware/Ir_obstacle.c
+        - path: Hardware/Ir_obstacle.h
       folders: []
     - name: User
       files:
