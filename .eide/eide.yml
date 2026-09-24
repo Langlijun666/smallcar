@@ -90,8 +90,6 @@ virtualFolder:
         - path: Hardware/Car.h
         - path: Hardware/Serial.c
         - path: Hardware/Serial.h
-        - path: Hardware/NVIC.c
-        - path: Hardware/NVIC.h
         - path: Hardware/Servo.c
         - path: Hardware/Servo.h
         - path: Hardware/Ultrasound.c

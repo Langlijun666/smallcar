@@ -1,6 +1,5 @@
 #include"stm32f10x.h"
 #include"Serial.h"
-#include"NVIC.h"
 #include"Car.h"
 #include"Servo.h"
 /*对USART1进行初始化
@@ -51,8 +50,14 @@ void Serial_Init(void)
     */
     //打开串口中断
     USART_ITConfig(USART1,USART_IT_RXNE,ENABLE);
-    //初始化中断
-    MyNVIC_Init();
+    //初始化USARTNVIC 
+    NVIC_InitTypeDef NVIC_InitStruct;
+    NVIC_InitStruct.NVIC_IRQChannel = USART1_IRQn;//打开USART1的优先级通道
+    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;//设置抢占优先级为0
+    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;//设置子优先级为0
+    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;//使能
+    
+    NVIC_Init(&NVIC_InitStruct);//初始化
 }
 //发送数组函数，三个参数分别为要用的串口，要传的数组首地址，数组长度
 void Serial_SendBytes(USART_TypeDef * A, int16_t* Data1,int16_t length)
