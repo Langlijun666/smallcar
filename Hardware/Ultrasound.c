@@ -3,9 +3,9 @@
 #include"MyDelay.h"
 #include"Delay.h"
 //超声波模块初始化
-uint32_t Distance = 0;
-volatile uint32_t times = 0;
-volatile uint32_t Flag = 0;
+uint32_t Distance = 0;//超声波测得的距离
+volatile uint32_t times = 0;//超声波发出和接受中间的时间
+volatile uint32_t Flag = 0;//用来判断是高电位还是低电位
 void Ultrasound_Init(void)
 {
     //初始化PB5和6，一个作为超声波模块信号输出，一个作为超声波模块信号输入
@@ -65,24 +65,24 @@ uint32_t GetDistance(void)
     Distance /= 10;
     return Distance;
 }
-
+//检测到PB6输入信号，通过信号测算距离
 void EXTI9_5_IRQHandler(void)
 {
-    if(EXTI_GetFlagStatus(EXTI_Line6) == SET)
+    if(EXTI_GetFlagStatus(EXTI_Line6) == SET)//判断是否是PB6引发的中断
     {
-        EXTI_ClearFlag(EXTI_Line6);
-        if(Flag == 0)
+        EXTI_ClearFlag(EXTI_Line6);//清除标志位
+        if(Flag == 0)//判断是不是高电位（0代表是高电位）
         {
             Flag = 1;
-            TIM_SetCounter(TIM4,0);
-            TIM_Cmd(TIM4,ENABLE);
+            TIM_SetCounter(TIM4,0);//清空定时器
+            TIM_Cmd(TIM4,ENABLE);//开启定时器
         }
         else
         {
             Flag = 0;
-            TIM_Cmd(TIM4,DISABLE);
-            times = Currents * 1000 + TIM_GetCounter(TIM4);
-            Currents = 0;
+            TIM_Cmd(TIM4,DISABLE);//关闭定时器
+            times = Currents * 1000 + TIM_GetCounter(TIM4);//测得时间为计数器里的数（单位为微妙）加上目前测得的毫秒数（计数器触发中断次数）乘1000
+            Currents = 0;//清零
         }
     }
 }
