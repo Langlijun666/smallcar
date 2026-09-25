@@ -2,7 +2,7 @@
 #define __SERIAL_H
 #define CAR_MODE_AUTO   1
 #define CAR_MODE_MANUAL 0
-
+#define CAR_MODE_LINE   2
 extern volatile uint8_t CarMode;
 
 void Serial_Init(void);

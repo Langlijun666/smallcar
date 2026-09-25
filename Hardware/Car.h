@@ -10,5 +10,7 @@ void Car_Go_Backward(void);
 void Car_Turn_Left(void);
 void Car_Turn_Right(void);
 void Car_Stop(void);
-void Car_Turn_back(void);
+void Car_Self_back(void);
+void Car_Self_Left(void);
+void Car_Self_Right(void);
 #endif

@@ -132,7 +132,8 @@ void USART1_IRQHandler(void)
             case '6': CarMode = CAR_MODE_MANUAL;SetServoAngle(90);           break;
             case '7': CarMode = CAR_MODE_MANUAL;SetServoAngle(180);          break;
             case 'S': CarMode = CAR_MODE_MANUAL;Car_Stop();                  break;
-            case 'A': case '0': CarMode = CAR_MODE_AUTO;Car_Stop();           break;
+            case 'A': case '0': CarMode = CAR_MODE_AUTO;Car_Stop();          break;
+            case 'C': case '8': CarMode = CAR_MODE_LINE;Car_Stop();          break;
             default: CarMode = CAR_MODE_MANUAL;           Car_Stop();        break;//S和不认识的字符都停车
         }
         
