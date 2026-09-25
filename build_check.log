@@ -1,0 +1,102 @@
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\STM32\keil5\ARM\ARMCC\Bin'
+Build target 'Target 1'
+compiling motor.c...
+.\Hardware\Car.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Hardware\Serial.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif // __SERIAL_H
+.\User\main_conf.h(11): warning:  #1-D: last line of file ends without a newline
+  #include"MyDelay.h"
+Hardware\motor.c: 3 warnings, 0 errors
+compiling Servo.c...
+.\Hardware\Car.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Hardware\Serial.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif // __SERIAL_H
+.\User\main_conf.h(11): warning:  #1-D: last line of file ends without a newline
+  #include"MyDelay.h"
+Hardware\Servo.c: 3 warnings, 0 errors
+compiling LED.c...
+.\Hardware\Car.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Hardware\Serial.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif // __SERIAL_H
+.\User\main_conf.h(11): warning:  #1-D: last line of file ends without a newline
+  #include"MyDelay.h"
+Hardware\LED.c: 3 warnings, 0 errors
+compiling Ir_obstacle.c...
+.\Hardware\Car.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Hardware\Serial.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif // __SERIAL_H
+.\User\main_conf.h(11): warning:  #1-D: last line of file ends without a newline
+  #include"MyDelay.h"
+Hardware\Ir_obstacle.c: 3 warnings, 0 errors
+compiling Serial.c...
+.\Hardware\Car.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Hardware\Serial.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif // __SERIAL_H
+.\User\main_conf.h(11): warning:  #1-D: last line of file ends without a newline
+  #include"MyDelay.h"
+Hardware\Serial.c(128): warning:  #1-D: last line of file ends without a newline
+  }
+Hardware\Serial.c: 4 warnings, 0 errors
+compiling Key.c...
+.\Hardware\Car.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Hardware\Serial.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif // __SERIAL_H
+.\User\main_conf.h(11): warning:  #1-D: last line of file ends without a newline
+  #include"MyDelay.h"
+Hardware\Key.c: 3 warnings, 0 errors
+compiling Ultrasound.c...
+.\Hardware\Car.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Hardware\Serial.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif // __SERIAL_H
+.\User\main_conf.h(11): warning:  #1-D: last line of file ends without a newline
+  #include"MyDelay.h"
+Hardware\Ultrasound.c: 3 warnings, 0 errors
+compiling Car.c...
+.\Hardware\Car.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Hardware\Serial.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif // __SERIAL_H
+.\User\main_conf.h(11): warning:  #1-D: last line of file ends without a newline
+  #include"MyDelay.h"
+Hardware\Car.c: 3 warnings, 0 errors
+compiling main.c...
+.\Hardware\Car.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Hardware\Serial.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif // __SERIAL_H
+User\main_conf.h(11): warning:  #1-D: last line of file ends without a newline
+  #include"MyDelay.h"
+User\main.c(3): warning:  #1295-D: Deprecated declaration Auto_Run - give arg types
+  void Auto_Run();
+User\main.c(58): warning:  #1-D: last line of file ends without a newline
+  }
+User\main.c: 5 warnings, 0 errors
+compiling OLED.c...
+.\Hardware\Car.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Hardware\Serial.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif // __SERIAL_H
+.\User\main_conf.h(11): warning:  #1-D: last line of file ends without a newline
+  #include"MyDelay.h"
+Hardware\OLED.c: 3 warnings, 0 errors
+compiling PWM.c...
+.\Hardware\Car.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Hardware\Serial.h(10): warning:  #1-D: last line of file ends without a newline
+  #endif // __SERIAL_H
+.\User\main_conf.h(11): warning:  #1-D: last line of file ends without a newline
+  #include"MyDelay.h"
+Hardware\PWM.c(113): warning:  #1-D: last line of file ends without a newline
+  }
+Hardware\PWM.c: 4 warnings, 0 errors
+linking...
+Program Size: Code=6700 RO-data=268 RW-data=36 ZI-data=1636  
+".\Objects\Project.axf" - 0 Error(s), 37 Warning(s).
+Build Time Elapsed:  00:00:01
