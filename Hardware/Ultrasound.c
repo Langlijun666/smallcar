@@ -1,7 +1,5 @@
-#include"stm32f10x.h"
-#include"Ultrasound.h"
-#include"MyDelay.h"
-#include"Delay.h"
+#include"main_conf.h"
+
 //超声波模块初始化
 uint32_t Distance = 0;//超声波测得的距离
 volatile uint32_t times = 0;//超声波发出和接受中间的时间
@@ -45,7 +43,7 @@ void Ultrasound_Init(void)
 
 }
 
-uint32_t GetDistance(void)
+uint32_t Ultrasound_GetDistance(void)
 {
     Distance = 0;//单位为厘米
     for(int i = 0;i < 10;i ++)
@@ -53,6 +51,7 @@ uint32_t GetDistance(void)
         Flag = 0;
         TIM_Cmd(TIM4,DISABLE);
         Currents = 0;
+        times = 0;
         //按照超声波模块需求发送波形
         GPIO_SetBits(GPIOB,GPIO_Pin_5);
         Delay_us(15);

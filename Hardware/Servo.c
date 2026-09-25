@@ -1,6 +1,5 @@
-#include "stm32f10x.h"
-#include "Servo.h"
-#include "PWM.h"
+#include"main_conf.h"
+
 //舵机模块初始化
 void Servo_Init(void)
 {

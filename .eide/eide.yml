@@ -75,10 +75,6 @@ virtualFolder:
       folders: []
     - name: Hardware
       files:
-        - path: Hardware/LED.c
-        - path: Hardware/LED.h
-        - path: Hardware/Key.c
-        - path: Hardware/Key.h
         - path: Hardware/OLED.c
         - path: Hardware/OLED.h
         - path: Hardware/OLED_Font.h
@@ -103,6 +99,7 @@ virtualFolder:
         - path: User/stm32f10x_conf.h
         - path: User/stm32f10x_it.c
         - path: User/stm32f10x_it.h
+        - path: User/main_conf.h
       folders: []
 dependenceList: []
 outDir: build

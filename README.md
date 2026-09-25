@@ -11,7 +11,7 @@
 - 四路红外循迹检测，并通过四个 LED 显示检测状态
 - SG90 舵机角度控制
 - HC-SR04 超声波测距
-- OLED、LED、按键等基础外设驱动
+- OLED 等基础外设驱动
 - 通过 USART1 中断自动接收蓝牙指令，不需要在主循环中反复判断
 
 ## 硬件模块
@@ -25,8 +25,6 @@
 | Ir_obstacle | `Hardware/Ir_obstacle.c/.h` | 四路红外循迹检测和状态灯显示 |
 | Servo | `Hardware/Servo.c/.h` | SG90 舵机控制 |
 | Ultrasound | `Hardware/Ultrasound.c/.h` | HC-SR04 超声波测距 |
-| LED | `Hardware/LED.c/.h` | LED 指示灯 |
-| Key | `Hardware/Key.c/.h` | 按键检测 |
 | OLED | `Hardware/OLED.c/.h` | OLED 显示驱动 |
 | MyDelay | `System/MyDelay.c/.h` | TIM4 计时，用于超声波测距 |
 
@@ -109,10 +107,6 @@ PB13 红外4 -> PA11 灯4
 
 | 功能 | GPIO | 说明 |
 |------|------|------|
-| LED1 | PA3 | 指示灯 1 |
-| LED2 | PA2 | 指示灯 2 |
-| 按键 1 | PB1 | 按键输入 |
-| 按键 2 | PB11 | 按键输入 |
 | SWD | PA13/PA14 | 调试和烧录接口 |
 
 ## 蓝牙控制指令
@@ -128,9 +122,12 @@ PB13 红外4 -> PA11 灯4
 | `5` | 舵机转到 0° |
 | `6` | 舵机转到 90° |
 | `7` | 舵机转到 180° |
-| 其他字符 | 停车 |
+| `S` | 停车并切换到手动模式 |
+| `A` / `0` | 恢复自动避障模式 |
+| 其他字符 | 停车并切换到手动模式 |
 
 小写字母 `f`、`b`、`l`、`r` 会自动按大写字母处理。
+自动模式下，主程序会调用 `Auto_Run()` 进行超声波避障；发送 `F`、`B`、`L`、`R`、`S` 等指令后会切换到手动模式，发送 `A` 或 `0` 可恢复自动模式。
 
 ## 运动控制 API
 
@@ -190,10 +187,10 @@ SetServoAngle(180);   // 180°
 #include "Ultrasound.h"
 
 Ultrasound_Init();
-uint32_t distance = GetDistance();
+uint32_t distance = Ultrasound_GetDistance();
 ```
 
-`GetDistance()` 返回单位为厘米的距离值。当前实现会连续测量 10 次并取平均值，因此一次测量大约需要 0.6 秒。
+`Ultrasound_GetDistance()` 返回单位为厘米的距离值。当前实现会连续测量 10 次并取平均值，因此一次测量大约需要 0.6 秒。
 
 ## 开发环境
 
@@ -224,10 +221,19 @@ git clone https://github.com/Langlijun666/smallcar.git
 
 ## 版本记录
 
+- **v3.2**：移除未使用 KEY/LED 模块，修正 TIM4 和 `Car_Turn_back()`，增加自动/手动模式
 - **v3.1**：新增四路红外循迹检测和状态灯显示
 - **v3.0**：新增 HC-06 蓝牙中断遥控、SG90 舵机控制、HC-SR04 超声波测距
 - **v2.0**：新增 TB6612 四轮电机驱动和运动控制
 - **v1.0**：基础框架、OLED、LED、按键和 PWM 功能
+
+## v3.2 更新说明
+
+- 移除未使用的 KEY/LED 模块及其工程配置。
+- `Car_Turn_back()` 当前按右转方向执行，具体旋转角度由调用处的延时控制。
+- TIM4 时基参数明确设置为 `TIM_ClockDivision = TIM_CKD_DIV1`。
+- 增加自动/手动模式切换，蓝牙指令不会被自动避障逻辑覆盖。
+- 补齐源码文件末尾换行，清理工程文件中的已删除模块引用。
 
 ## 开源说明
 

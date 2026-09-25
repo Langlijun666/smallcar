@@ -1,9 +1,4 @@
-
-#include "stm32f10x.h" 
-#include "motor.h"
-#include "Car.h"
-#include "Delay.h"
-#include "Serial.h"
+#include"main_conf.h"
 
 #define CAR_SPEED 70    //速度固定为70，想改整车快慢只改这个数字
 
@@ -40,6 +35,10 @@ void Car_Turn_Left(void)
     Motor_Set_Right_Speed(-CAR_SPEED);  // 修改：右轮前进
 }
 
+void Car_Turn_back(void)
+{
+    Car_Turn_Right();
+}
 void Car_Stop(void)
 {
     Motor_Set_Left_Speed(0);

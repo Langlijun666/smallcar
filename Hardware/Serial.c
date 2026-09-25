@@ -1,7 +1,5 @@
-#include"stm32f10x.h"
-#include"Serial.h"
-#include"Car.h"
-#include"Servo.h"
+#include"main_conf.h"
+volatile uint8_t CarMode = CAR_MODE_AUTO;
 /*对USART1进行初始化
 TX-PA9 RX -PA10
 9600bits 数据位8，停止位1，无校验位
@@ -59,8 +57,43 @@ void Serial_Init(void)
     
     NVIC_Init(&NVIC_InitStruct);//初始化
 }
+
+void Serial_SendByte(uint8_t Byte)
+{
+	USART_SendData(USART1, Byte);		//将字节数据写入数据寄存器，写入后USART自动生成时序波形
+	while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);	//等待发送完成
+	/*下次写入数据寄存器会自动清除发送完成标志位，故此循环后，无需清除标志位*/
+}
+
+uint32_t Serial_Pow(uint32_t X, uint32_t Y)
+{
+	uint32_t Result = 1;	//设置结果初值为1
+	while (Y --)			//执行Y次
+	{
+		Result *= X;		//将X累乘到结果
+	}
+	return Result;
+}
+
+void Serial_SendString(char *String)
+{
+	uint8_t i;
+	for (i = 0; String[i] != '\0'; i ++)//遍历字符数组（字符串），遇到字符串结束标志位后停止
+	{
+		Serial_SendByte(String[i]);		//依次调用Serial_SendByte发送每个字节数据
+	}
+}
+
+void Serial_SendNumber(uint32_t Number, uint8_t Length)
+{
+	uint8_t i;
+	for (i = 0; i < Length; i ++)		//根据数字长度遍历数字的每一位
+	{
+		Serial_SendByte(Number / Serial_Pow(10, Length - i - 1) % 10 + '0');	//依次调用Serial_SendByte发送每位数字
+	}
+}
 //发送数组函数，三个参数分别为要用的串口，要传的数组首地址，数组长度
-void Serial_SendBytes(USART_TypeDef * A, int16_t* Data1,int16_t length)
+void Serial_SendBytes(USART_TypeDef * A, int8_t* Data1,int16_t length)
 {
     for(int i = 0;i < length;i ++)//循环发送数组中每个数据
     {
@@ -88,16 +121,19 @@ void USART1_IRQHandler(void)
         {
             cmd = cmd - 'a' + 'A';
         }
+        //接收到蓝牙信号，车子自动变成手动操控
         switch (cmd)
         {
-            case 'F': case '1': Car_Go_Forward();  break;
-            case 'B': case '2': Car_Go_Backward(); break;
-            case 'L': case '3': Car_Turn_Left();   break;
-            case 'R': case '4': Car_Turn_Right();  break;
-            case'5': SetServoAngle(0);             break;
-            case'6': SetServoAngle(90);            break;
-            case'7': SetServoAngle(180);           break;
-            default:            Car_Stop();        break;//S和不认识的字符都停车
+            case 'F': case '1': CarMode = CAR_MODE_MANUAL;Car_Go_Forward();  break;
+            case 'B': case '2': CarMode = CAR_MODE_MANUAL;Car_Go_Backward(); break;
+            case 'L': case '3': CarMode = CAR_MODE_MANUAL;Car_Turn_Left();   break;
+            case 'R': case '4': CarMode = CAR_MODE_MANUAL;Car_Turn_Right();  break;
+            case '5': CarMode = CAR_MODE_MANUAL;SetServoAngle(0);            break;
+            case '6': CarMode = CAR_MODE_MANUAL;SetServoAngle(90);           break;
+            case '7': CarMode = CAR_MODE_MANUAL;SetServoAngle(180);          break;
+            case 'S': CarMode = CAR_MODE_MANUAL;Car_Stop();                  break;
+            case 'A': case '0': CarMode = CAR_MODE_AUTO;Car_Stop();           break;
+            default: CarMode = CAR_MODE_MANUAL;           Car_Stop();        break;//S和不认识的字符都停车
         }
         
     }

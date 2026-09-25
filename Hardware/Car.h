@@ -10,6 +10,5 @@ void Car_Go_Backward(void);
 void Car_Turn_Left(void);
 void Car_Turn_Right(void);
 void Car_Stop(void);
-void Car_RemoteControl(void);
-
+void Car_Turn_back(void);
 #endif

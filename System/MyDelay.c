@@ -6,7 +6,7 @@ void MyDelay_Init(void)
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4,ENABLE);
     TIM_TimeBaseInitTypeDef TIM_TimeBaseInitstruct;
     TIM_TimeBaseInitstruct.TIM_CounterMode = TIM_CounterMode_Up;
-//  TIM_TimeBaseInitstruct.TIM_ClockDivision = ; 用不到
+    TIM_TimeBaseInitstruct.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_TimeBaseInitstruct.TIM_Period = 999;
     TIM_TimeBaseInitstruct.TIM_RepetitionCounter = 0;
     TIM_TimeBaseInitstruct.TIM_Prescaler = 71;

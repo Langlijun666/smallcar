@@ -1,5 +1,4 @@
-#include"stm32f10x.h"
-#include"Ir_obstacle.h"
+#include"main_conf.h"
 
 void Ir_obstacle_Init(void)
 {
