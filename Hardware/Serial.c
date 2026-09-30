@@ -117,6 +117,10 @@ void USART1_IRQHandler(void)
     while(USART_GetFlagStatus(USART1,USART_FLAG_RXNE) == SET)
     {
         uint16_t cmd = USART_ReceiveData(USART1);
+        if(cmd == '\r' || cmd == '\n')
+        {
+            continue;
+        }
         if (cmd >= 'a' && cmd <= 'z')//小写字母自动当大写处理
         {
             cmd = cmd - 'a' + 'A';
