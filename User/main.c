@@ -27,20 +27,19 @@ int main(void)
 
 void Auto_Run(void)
 {
-    Car_Stop();
     if(CarMode != CAR_MODE_AUTO)
     {
         return;
     }
     //先判断能不能前进
-    uint32_t a = Ultrasound_GetDistance();
+    float a = Ultrasound_GetDistance();
     if(CarMode != CAR_MODE_AUTO)
     {
         return;
     }
     char *buf = "\nFront distance:";
     Serial_SendString(buf);
-    Serial_SendNumber(a,3);
+    Serial_SendNumber((uint32_t)a,3);
     //不能前进
     if(a < 15)
     {
@@ -52,14 +51,14 @@ void Auto_Run(void)
         {
             return;
         }
-        uint32_t b = Ultrasound_GetDistance();
+        float b = Ultrasound_GetDistance();
         if(CarMode != CAR_MODE_AUTO)
         {
             return;
         }
         char *buf = "\nRight distance:";
         Serial_SendString(buf);
-        Serial_SendNumber(b,3);
+        Serial_SendNumber((uint32_t)b,3);
         if(b > 15)//右边能走
         {
             //转向到右边
@@ -86,14 +85,14 @@ void Auto_Run(void)
             {
                 return;
             }
-            uint32_t c = Ultrasound_GetDistance();
+            float c = Ultrasound_GetDistance();
             if(CarMode != CAR_MODE_AUTO)
             {
                 return;
             }
             char *buf = "\nLeft distance:";
             Serial_SendString(buf);
-            Serial_SendNumber(c,3);
+            Serial_SendNumber((uint32_t)c,3);
             if(c > 15)//左边能走
             {
                 //转向左边
@@ -128,14 +127,14 @@ void Auto_Run(void)
                     return;
                 }
                 Car_Stop();
-                uint32_t d = Ultrasound_GetDistance();
+                float d = Ultrasound_GetDistance();
                 if(CarMode != CAR_MODE_AUTO)
                 {
                     return;
                 }
                 char *buf = "\nBack distance:";
                 Serial_SendString(buf);
-                Serial_SendNumber(d,3);
+                Serial_SendNumber((uint32_t)d,3);
                 if(d > 15)//后边能走
                 {
                     return;
@@ -176,11 +175,11 @@ void followLine(void)
     }
     else if (GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_7) == 0 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_10) == 0 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_12) == 1 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_13) == 0)
     {
-        Car_Turn_Right();
+        Car_Self_Right();
     }
     else if (GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_7) == 0 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_10) == 0 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_12) == 0 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_13) == 1)
     {
-        Car_Turn_Right();
+        Car_Self_Right();
     }
     else if(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_7) == 1 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_10) == 1 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_12) == 0 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_13) == 0)
     {
@@ -188,11 +187,11 @@ void followLine(void)
     }
     else if (GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_7) == 1 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_10) == 0 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_12) == 0 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_13) == 0)
     {
-        Car_Turn_Left();
+        Car_Self_Left();
     }
     else if (GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_7) == 0 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_10) == 1 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_12) == 0 && GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_13) == 0)
     {
-        Car_Turn_Left();
+        Car_Self_Left();
     }
     else Car_Stop();
 }
