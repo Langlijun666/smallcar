@@ -1,40 +1,77 @@
-# dot files
+# Local IDE state
 /.vscode/launch.json
-/.settings
-/.eide/log
+/.vscode/c_cpp_properties.json
+/.vscode/settings.json
+/.settings/
+/.eide/log/
 /.eide.usr.ctx.json
-
-# project out
-/build
-/bin
-/obj
-/out
-
-# eide template
 *.ept
 *.eide-template
 
-# Keil build outputs
-/Objects
-/Listings
-/DebugConfig
-*.uvguix.Admin
-*.uvguix.Lenovo
+# Keil UI and local options
+*.uvguix.*
+*.uvgui.*
+*.uvopt
 *.uvoptx
 
-# Keil pack files
-/.pack
+# Build and generated directories
+/build/
+/bin/
+/obj/
+/out/
+/Objects/
+/Listings/
+/Debug/
+/Release/
+/DebugConfig/
 
-# CMSIS config
-/.cmsis
+# Keil / ARMCC generated files
+*.o
+*.obj
+*.d
+*.crf
+*.dep
+*.lnp
+*.axf
+*.elf
+*.hex
+*.bin
+*.map
+*.lst
+*.iex
+*.plg
+*.rpt
+*.tra
+*.build_log.htm
+/build_*.log
+JLinkLog.txt
 
-# Claude Code
-/.claude
+# Temporary and backup files
+*.bak
+*.tmp
+*.old
+
+# External toolchain/package caches
+/.pack/
+/.cmsis/
+
+# AI and local agent state
+/.claude/
+/.codex/
+
+# Local secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
 
 # OS generated files
 Thumbs.db
 Desktop.ini
 .DS_Store
-
-# Codex
-/.codex
